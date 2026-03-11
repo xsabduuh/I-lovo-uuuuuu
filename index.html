@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لائحة مراجعة البكالوريا</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c16;
+    --card: #111827;
+    --border: #1a2540;
+    --text: #dde4f0;
+    --muted: #5a6a8a;
+    --done: #10b981;
+    --partial: #f59e0b;
+    --phys: #38bdf8;
+    --chem: #c084fc;
+    --math: #fb7185;
+    --svt: #34d399;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Cairo',sans-serif;min-height:100vh;padding:16px 12px 60px;background-image:radial-gradient(ellipse 60% 40% at 10% 5%,rgba(56,189,248,.05) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 90%,rgba(192,132,252,.04) 0%,transparent 60%);}
+  header{text-align:center;padding:32px 16px 22px;}
+  header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;letter-spacing:-.02em;background:linear-gradient(120deg,#dde4f0 40%,#5a6a8a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  header p{color:var(--muted);font-size:.83rem;margin-top:4px;}
+  .total-wrap{max-width:860px;margin:0 auto 18px;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px 20px;display:flex;align-items:center;gap:14px;}
+  .total-label{font-size:.8rem;font-weight:700;color:var(--muted);white-space:nowrap;}
+  .bar-track{flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;transition:width .5s ease;background:linear-gradient(90deg,var(--phys),var(--chem),var(--math),var(--svt));}
+  .total-pct{font-size:1rem;font-weight:900;min-width:42px;text-align:left;}
+  .overview{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:860px;margin:0 auto 16px;}
+  @media(max-width:580px){.overview{grid-template-columns:repeat(2,1fr);}}
+  .ov{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 8px 9px;text-align:center;position:relative;overflow:hidden;transition:transform .2s;}
+  .ov:hover{transform:translateY(-2px);}
+  .ov::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+  .ov.phys::after{background:var(--phys);}.ov.chem::after{background:var(--chem);}.ov.math::after{background:var(--math);}.ov.svt::after{background:var(--svt);}
+  .ov .ico{font-size:1.3rem;margin-bottom:3px;}.ov .lbl{font-size:.68rem;color:var(--muted);margin-bottom:2px;}.ov .num{font-size:1.25rem;font-weight:900;}
+  .ov.phys .num{color:var(--phys);}.ov.chem .num{color:var(--chem);}.ov.math .num{color:var(--math);}.ov.svt .num{color:var(--svt);}
+  .ov .cnt{font-size:.65rem;color:var(--muted);margin-top:1px;}
+  .legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;max-width:860px;margin:0 auto 14px;}
+  .leg{display:flex;align-items:center;gap:5px;font-size:.73rem;color:var(--muted);}
+  .ldot{width:9px;height:9px;border-radius:3px;}.ld-done{background:var(--done);}.ld-part{background:var(--partial);}.ld-todo{background:var(--border);border:1px solid var(--muted);}
+  .block{max-width:860px;margin:0 auto 14px;background:var(--card);border:1px solid var(--border);border-radius:15px;overflow:hidden;}
+  .block-head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;user-select:none;}
+  .block-head:hover{background:rgba(255,255,255,.015);}
+  .bico{width:35px;height:35px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;}
+  .phys .bico{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);}.chem .bico{background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.2);}.math .bico{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.2);}.svt .bico{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);}
+  .btitle{flex:1;}.btitle .main{font-size:.92rem;font-weight:700;}.btitle .sub{font-size:.68rem;color:var(--muted);}
+  .mini-bar{width:72px;height:5px;background:var(--border);border-radius:99px;overflow:hidden;flex-shrink:0;}
+  .mini-fill{height:100%;border-radius:99px;transition:width .4s;}
+  .phys .mini-fill{background:var(--phys);}.chem .mini-fill{background:var(--chem);}.math .mini-fill{background:var(--math);}.svt .mini-fill{background:var(--svt);}
+  .mini-pct{font-size:.7rem;font-weight:800;min-width:30px;text-align:left;}
+  .phys .mini-pct{color:var(--phys);}.chem .mini-pct{color:var(--chem);}.math .mini-pct{color:var(--math);}.svt .mini-pct{color:var(--svt);}
+  .chv{font-size:.65rem;color:var(--muted);transition:transform .2s;flex-shrink:0;}.chv.open{transform:rotate(180deg);}
+  .chap-wrap{padding:0 10px 5px;}.ch-t{font-size:.66rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:11px 4px 4px;}
+  .lesson{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:9px;margin-bottom:2px;transition:background .15s;}
+  .lesson:hover{background:rgba(255,255,255,.022);}
+  .ltext{flex:1;}.lname{font-size:.82rem;}.lsub{font-size:.66rem;color:var(--muted);margin-top:1px;line-height:1.3;}
+  .lesson.done .lname{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(90,106,138,.35);}
+  .sbg{display:flex;gap:4px;}
+  .sb{width:25px;height:25px;border-radius:7px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:var(--muted);transition:all .15s;}
+  .sb:hover{border-color:var(--muted);color:var(--text);}.sb.is-done{background:rgba(16,185,129,.15);border-color:var(--done);color:var(--done);}.sb.is-part{background:rgba(245,158,11,.15);border-color:var(--partial);color:var(--partial);}
+  .note{background:transparent;border:none;outline:none;color:var(--muted);font-family:'Cairo',sans-serif;font-size:.7rem;width:76px;cursor:text;text-align:right;}
+  .note::placeholder{color:rgba(90,106,138,.3);}.note:focus{color:var(--text);}
+  @media(max-width:480px){.note{width:48px;}.mini-bar,.btitle .sub{display:none;}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎓 لائحة مراجعة البكالوريا</h1>
+  <p>تتبع مراجعتك درساً بدرس — كل شيء يُحفظ تلقائياً</p>
+</header>
+<div class="total-wrap">
+  <div class="total-label">التقدم الإجمالي</div>
+  <div class="bar-track"><div class="bar-fill" id="gfill" style="width:0%"></div></div>
+  <div class="total-pct" id="gpct">0%</div>
+</div>
+<div class="overview">
+  <div class="ov phys"><div class="ico">⚛️</div><div class="lbl">الفيزياء</div><div class="num" id="op-phys">0%</div><div class="cnt" id="oc-phys"></div></div>
+  <div class="ov chem"><div class="ico">🧪</div><div class="lbl">الكيمياء</div><div class="num" id="op-chem">0%</div><div class="cnt" id="oc-chem"></div></div>
+  <div class="ov math"><div class="ico">📐</div><div class="lbl">الرياضيات</div><div class="num" id="op-math">0%</div><div class="cnt" id="oc-math"></div></div>
+  <div class="ov svt"><div class="ico">🧬</div><div class="lbl">علوم الحياة</div><div class="num" id="op-svt">0%</div><div class="cnt" id="oc-svt"></div></div>
+</div>
+<div class="legend">
+  <div class="leg"><div class="ldot ld-done"></div>تمّت المراجعة</div>
+  <div class="leg"><div class="ldot ld-part"></div>قيد المراجعة</div>
+  <div class="leg"><div class="ldot ld-todo"></div>لم يُراجع بعد</div>
+</div>
+<div id="root"></div>
+<script>
+const DATA=[{id:'phys',label:'الفيزياء',sub:'Physique',icon:'⚛️',chapters:[{title:'الموجات',lessons:[{name:'الموجات الميكانيكية المتوالية',sub:'تعريف الموجة، سرعة الانتشار، التأخر الزمني'},{name:'الموجات الميكانيكية المتوالية الدورية',sub:'الدورية الزمانية والمكانية، ظاهرة الحيود'},{name:'انتشار موجة ضوئية',sub:'الطبيعة الموجية للضوء، حيود الضوء، تبدد الضوء بالمنشور'}]},{title:'التحولات النووية',lessons:[{name:'التناقص الإشعاعي',sub:'استقرار النوى، الإشعاع α وβ وγ، قانون التناقص الإشعاعي'},{name:'النوى والكتلة والطاقة',sub:'النقص الكتلي، طاقة الربط، الانشطار والاندماج النووي'}]},{title:'الكهرباء',lessons:[{name:'ثنائي القطب RC',sub:'شحن وتفريغ المكثف، ثابتة الزمن τ=RC'},{name:'ثنائي القطب RL',sub:'إقامة وانعدام التيار في الوشيعة، معامل الحث الذاتي L'},{name:'تذبذبات دارة RLC متوالية',sub:'التذبذبات الحرة، أنظمة التخميد، صيانة التذبذبات'},{name:'تضمين الوسع (المكبّر العملياتي)',sub:'مبدأ التضمين، كاشف الغلاف، التطبيقات'}]},{title:'الميكانيك',lessons:[{name:'قوانين نيوتن',sub:'متجه السرعة والتسارع، القوانين الثلاثة لنيوتن، تطبيقاتها'},{name:'السقوط الرأسي',sub:'السقوط الحر بإهمال الاحتكاك، والسقوط مع احتكاك الهواء'},{name:'الحركات المستوية',sub:'حركة قذيفة في مجال ثقالة، حركة جسيم مشحون في مجال كهرساكن'},{name:'الأقمار الصناعية والكواكب',sub:'قوانين كيبلر الثلاثة، الحركة الدائرية المنتظمة، ثابت الجذب'},{name:'الدوران',sub:'حركة دوران جسم صلب حول محور ثابت، عزم القصور الذاتي'},{name:'المتذبذبات الميكانيكية',sub:'النواس المرن، نواس اللي، النواس الوازن، النواس البسيط'},{name:'المظاهر الطاقية للمتذبذبات',sub:'طاقة الوضع، الطاقة الحركية، الطاقة الميكانيكية الكلية'},{name:'ميكانيك نيوتن والذرة',sub:'تكميم الطاقة، طيف الانبعاث، نموذج بور للذرة'}]}]},{id:'chem',label:'الكيمياء',sub:'Chimie',icon:'🧪',chapters:[{title:'التحولات الزمنية والتوازن الكيميائي',lessons:[{name:'التحولات السريعة والبطيئة',sub:'العوامل الكينيتية المؤثرة في سرعة التفاعل'},{name:'تتبع تحول كيميائي',sub:'السرعة الحجمية للتفاعل، زمن نصف التفاعل t½'},{name:'التحولات في منحيين',sub:'نسبة التقدم النهائي τ، ثابتة التوازن K'},{name:'حالة توازن مجموعة كيميائية',sub:'خارج التفاعل Qr، معيار مقارنته بـ K، تأثير الظروف'},{name:'تفاعلات حمض-قاعدة',sub:'ثابتة الحمضية Ka، سلم pH، حسابات pH للأحماض والقواعد'},{name:'المعايرة الحمضية القاعدية',sub:'تحديد التركيز المجهول، نقطة التكافؤ، طرق الكشف'}]},{title:'منحى تطور المجموعات الكيميائية',lessons:[{name:'التطور التلقائي',sub:'معيار التطور التلقائي بمقارنة Qr بـ K'},{name:'الأعمدة الكهروكيميائية',sub:'الاشتغال الكيميائي، القوة الكهرومحركة، الانتقال الإلكتروني'},{name:'التحولات القسرية (التحليل الكهربائي)',sub:'مبدأ التحليل الكهربائي، تطبيقاته الصناعية'},{name:'الأسترة والحلمأة',sub:'الخصائص والتوازن، مراقبة سرعة التفاعل ومردوده'}]}]},{id:'math',label:'الرياضيات',sub:'Mathématiques',icon:'📐',chapters:[{title:'التحليل',lessons:[{name:'الاتصال',sub:'الاتصال على مجال، قضية القيم الوسيطية، الدوال العكسية'},{name:'الاشتقاق ودراسة الدوال',sub:'تطبيقات الاشتقاق، الرتابة، جدول التغيرات، الرسم البياني'},{name:'المتتاليات العددية',sub:'النهايات، التقارب، المتتاليات من النوع u_{n+1}=f(u_n)'},{name:'الدوال اللوغاريتمية',sub:'الدالة ln والدالة log، خصائصهما وتطبيقاتهما'},{name:'الدوال الأسية',sub:'الدالة e^x، النمو والتناقص الأسي، التطبيقات'},{name:'الدوال الأصلية والتكامل',sub:'تقنيات الحساب التكاملي، حساب المساحات والحجوم'},{name:'المعادلات التفاضلية',sub:"حل y'=ay+b و y''+ay'+by=0 والشروط الابتدائية"}]},{title:'الجبر والهندسة والاحتمالات',lessons:[{name:'الأعداد العقدية',sub:'الشكل الجبري، المثلثي، الأسي، والتطبيقات الهندسية'},{name:'الهندسة الفضائية',sub:'الجداء السلمي والمتجهي، دراسة المستقيم والمستوى والكرة'},{name:'الحساب الاحتمالي',sub:'التعداد، الاحتمال الشرطي، متغير عشوائي منفصل، التوزيعات'}]}]},{id:'svt',label:'علوم الحياة والأرض',sub:'SVT',icon:'🧬',chapters:[{title:'وحدات البرنامج',lessons:[{name:'الطاقة الخلوية',sub:'التنفس الخلوي والتخمر، تجديد ATP، التقلص العضلي وتحويل الطاقة'},{name:'الوراثة الجزيئية',sub:'طبيعة الخبر الوراثي (DNA)، التعبير البروتيني (نسخ وترجمة)، الهندسة الوراثية'},{name:'التوالد الجنسي وانتقال الصفات',sub:'الانقسام الاختزالي والإخصاب، قوانين ماندل الإحصائية'},{name:'البيئة والتلوث',sub:'تلوث الهواء والماء والتربة، النفايات المنزلية، الطاقة النووية'},{name:'الجيولوجيا الداخلية',sub:'تكتونية الصفائح، تشكّل السلاسل الجبلية، الصخور المتحولة والغرانيتية'}]}]}];
+const ST=JSON.parse(localStorage.getItem('bac3_st')||'{}');
+function save(){localStorage.setItem('bac3_st',JSON.stringify(ST));}
+function lid(sid,ci,li){return `${sid}_${ci}_${li}`;}
+function gst(id){return ST[id]||'todo';}
+function sst(id,v){ST[id]=v;save();refresh();}
+function calcPct(sid){const s=DATA.find(x=>x.id===sid);let tot=0,val=0;s.chapters.forEach((c,ci)=>c.lessons.forEach((_,li)=>{const st=gst(lid(sid,ci,li));tot++;if(st==='done')val++;else if(st==='part')val+=.5;}));return tot?Math.round(val/tot*100):0;}
+function calcCounts(sid){const s=DATA.find(x=>x.id===sid);let tot=0,done=0;s.chapters.forEach((c,ci)=>c.lessons.forEach((_,li)=>{tot++;if(gst(lid(sid,ci,li))==='done')done++;}));return{tot,done};}
+function refresh(){let gtot=0,gval=0;DATA.forEach(s=>{const p=calcPct(s.id);const{tot,done}=calcCounts(s.id);const el=document.getElementById('op-'+s.id);const mf=document.getElementById('mf-'+s.id);const mp=document.getElementById('mp-'+s.id);const oc=document.getElementById('oc-'+s.id);if(el)el.textContent=p+'%';if(mf)mf.style.width=p+'%';if(mp)mp.textContent=p+'%';if(oc)oc.textContent=done+' / '+tot+' درس';s.chapters.forEach((c,ci)=>c.lessons.forEach((_,li)=>{const id=lid(s.id,ci,li);const st=gst(id);gtot++;if(st==='done')gval++;else if(st==='part')gval+=.5;const row=document.getElementById('r-'+id);const db=document.getElementById('db-'+id);const pb=document.getElementById('pb-'+id);if(row)row.classList.toggle('done',st==='done');if(db)db.classList.toggle('is-done',st==='done');if(pb)pb.classList.toggle('is-part',st==='part');}));});const gp=gtot?Math.round(gval/gtot*100):0;document.getElementById('gfill').style.width=gp+'%';document.getElementById('gpct').textContent=gp+'%';}
+function build(){const root=document.getElementById('root');DATA.forEach(s=>{const block=document.createElement('div');block.className=`block ${s.id}`;const head=document.createElement('div');head.className='block-head';head.innerHTML=`<div class="bico">${s.icon}</div><div class="btitle"><div class="main">${s.label}</div><div class="sub">${s.sub}</div></div><div class="mini-bar"><div class="mini-fill" id="mf-${s.id}" style="width:0%"></div></div><div class="mini-pct" id="mp-${s.id}">0%</div><div class="chv open" id="chv-${s.id}">▼</div>`;const body=document.createElement('div');body.id='body-'+s.id;head.addEventListener('click',()=>{const b=document.getElementById('body-'+s.id);const c=document.getElementById('chv-'+s.id);const hidden=b.style.display==='none';b.style.display=hidden?'':'none';c.classList.toggle('open',hidden);});s.chapters.forEach((ch,ci)=>{const cw=document.createElement('div');cw.className='chap-wrap';const ct=document.createElement('div');ct.className='ch-t';ct.textContent=ch.title;cw.appendChild(ct);ch.lessons.forEach((les,li)=>{const id=lid(s.id,ci,li);const nk='n_'+id;const note=(ST[nk]||'').replace(/"/g,'&quot;');const row=document.createElement('div');row.className='lesson';row.id='r-'+id;row.innerHTML=`<div class="ltext"><div class="lname">${les.name}</div><div class="lsub">${les.sub}</div></div><input class="note" placeholder="ملاحظة..." value="${note}" id="ni-${id}" /><div class="sbg"><button class="sb" id="pb-${id}" title="قيد المراجعة">⟳</button><button class="sb" id="db-${id}" title="تمّت المراجعة">✓</button></div>`;row.querySelector('#db-'+id).addEventListener('click',e=>{e.stopPropagation();sst(id,gst(id)==='done'?'todo':'done');});row.querySelector('#pb-'+id).addEventListener('click',e=>{e.stopPropagation();sst(id,gst(id)==='part'?'todo':'part');});row.querySelector('#ni-'+id).addEventListener('input',e=>{ST[nk]=e.target.value;save();});row.querySelector('#ni-'+id).addEventListener('click',e=>e.stopPropagation());cw.appendChild(row);});body.appendChild(cw);});block.appendChild(head);block.appendChild(body);root.appendChild(block);});}
+build();refresh();
+</script>
+</body>
+</html>
